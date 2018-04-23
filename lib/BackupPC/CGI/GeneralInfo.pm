@@ -105,6 +105,7 @@ EOF
     my $nextWakeupTime = timeStamp2($Info{nextWakeup});
     my $DUlastTime   = timeStamp2($Info{DUlastValueTime});
     my $DUmaxTime    = timeStamp2($Info{DUDailyMaxTime});
+    my $DUmaxTimeInodes    = timeStamp2($Info{DUDailyMaxTimeInodes});
     my $numBgQueue   = $QueueLen{BgQueue};
     my $numUserQueue = $QueueLen{UserQueue};
     my $numCmdQueue  = $QueueLen{CmdQueue};

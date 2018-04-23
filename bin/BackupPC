@@ -66,6 +66,7 @@ use Carp;
 use version;
 use Digest::MD5;
 use POSIX qw(setsid);
+use Filesys::DiskSpace;
 
 ###########################################################################
 # Handle command line options
@@ -645,7 +646,7 @@ sub Main_TryToRun_Bg_or_User_Queue
 {
     my($req, $host);
     my(@deferUserQueue, @deferBgQueue);
-    my $du;
+    my ($du, $fused);
 
     if ( time - $Info->{DUlastValueTime} >= 600 ) {
         #
@@ -653,22 +654,31 @@ sub Main_TryToRun_Bg_or_User_Queue
         # once every 10 minutes
         #
         $du = $bpc->CheckFileSystemUsage($TopDir);
+#($fs_type, $fs_desc, $used, $avail, $fused, $favail) = df $TopDir;
+        (undef, undef, undef, undef, $fused, undef) = df $TopDir;
         $Info->{DUlastValue}     = $du;
+        $Info->{DUlastInodes}    = $fused;
         $Info->{DUlastValueTime} = time;
     } else {
         #
         # if we recently checked it then just use the old value
         #
         $du = $Info->{DUlastValue};
+        $fused = $Info->{DUlastInodes};
     }
     if ( $Info->{DUDailyMaxReset} ) {
         $Info->{DUDailyMaxStartTime} = time;
         $Info->{DUDailyMaxReset}     = 0;
         $Info->{DUDailyMax}          = 0;
+        $Info->{DUDailyMaxInodes}    = 0;
     }
     if ( $du > $Info->{DUDailyMax} ) {
         $Info->{DUDailyMax}     = $du;
         $Info->{DUDailyMaxTime} = time;
+    }
+    if ( $fused > $Info->{DUDailyMaxInodes} ) {
+        $Info->{DUDailyMaxInodes}     = $fused;
+        $Info->{DUDailyMaxTimeInodes} = time;
     }
     if ( $du > $Conf{DfMaxUsagePct} ) {
         my @bgQueue = @BgQueue;
@@ -902,6 +912,7 @@ sub Main_Check_Timeout
                    $Info->{DUDailySkipHostCnt});
         $Info->{DUDailyMaxReset}        = 1;
         $Info->{DUDailyMaxPrev}         = $Info->{DUDailyMax};
+        $Info->{DUDailyMaxPrevInodes}         = $Info->{DUDailyMaxInodes};
         $Info->{DUDailySkipHostCntPrev} = $Info->{DUDailySkipHostCnt};
         $Info->{DUDailySkipHostCnt}     = 0;
         my $lastLog = $Conf{MaxOldLogFiles} - 1;

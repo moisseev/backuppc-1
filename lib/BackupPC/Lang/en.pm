@@ -94,6 +94,9 @@ $Lang{BackupPC_Server_Status_General_Info}= <<EOF;
         <li>Pool file system was recently at \$Info{DUlastValue}%
             (\$DUlastTime), today\'s max is \$Info{DUDailyMax}% (\$DUmaxTime)
             and yesterday\'s max was \$Info{DUDailyMaxPrev}%.
+        <li>Pool file system inodes was recently at \$Info{DUlastInodes}
+            (\$DUlastTime), today\'s max is \$Info{DUDailyMaxInodes} (\$DUmaxTimeInodes)
+            and yesterday\'s max was \$Info{DUDailyMaxPrevInodes}.
     </ul>
 </ul>
 EOF
