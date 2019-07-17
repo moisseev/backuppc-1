@@ -51,6 +51,7 @@
 #========================================================================
 
 use strict;
+use warnings;
 no  utf8;
 use vars qw($Hosts);
 use lib "/usr/local/BackupPC/lib";
