@@ -1,4 +1,7 @@
 # See https://perltidy.github.io/perltidy/stylekey.html
+--warning-output
+--standard-error-output
+
 --maximum-line-length=120
 --nooutdent-long-lines
 
