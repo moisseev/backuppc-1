@@ -1034,7 +1034,7 @@ sub InstallFile
             s/__IMAGEDIR__/$Conf{CgiImageDir}/g;
             s/__IMAGEDIRURL__/$Conf{CgiImageDirURL}/g;
 
-            if ( $first && /^#.*bin\/perl/ ) {
+            if ( $first && /^#.*bin\/env perl/ ) {
                 #
                 # Fill in correct path to perl (no taint for >= 2.0.1).
                 #
